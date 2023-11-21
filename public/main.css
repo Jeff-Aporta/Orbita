@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@100&display=swap");
+
+body: {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  & div: {
+    background-color: red;
+    & h1: {
+      color: white;
+    }
+  }
+}
+
+.berlow {
+  font-family: "Barlow Semi Condensed", sans-serif;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+hr {
+  opacity: 0.3;
+}
+
+.contenedor-checkbox-dinamico {
+  .true {
+    display: none;
+  }
+  .false {
+    display: inline-block;
+  }
+  &:has(input:checked) {
+    .true {
+      display: inline-block;
+    }
+    .false {
+      display: none;
+    }
+  }
+}
