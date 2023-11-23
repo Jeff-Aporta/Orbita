@@ -37,7 +37,7 @@ module.exports = ({ query }) => {
   memoria.escribir({
     usuarios: {
       [PK]: {
-        "user.json": {
+        "usuario.json": {
           PK,
           ...query,
         },

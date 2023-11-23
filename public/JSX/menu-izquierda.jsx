@@ -1,6 +1,3 @@
-let contenedor_menu_izquierda = document.createElement("div");
-contenedor_menu_izquierda.classList.add("menu-izquierda-contenedor");
-
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
         width: 62,
         height: 34,
@@ -48,48 +45,25 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
         },
 }));
 
-const MenuIzquierda = () => {
-        return (
-                <ThemeProvider theme={theme}>
-                        <CssBaseline />
+function MenuIzquierda() {
+        addLink("/JSX/menu-izquierda.css");
 
-                        <label className="menu-izquierda-desactivador" for="estado-colpasamiento" onClick={() => {
-                                setTimeout(() => {
-                                        document.querySelector(".no-min-width").style.backgroundColor = document.getElementById("estado-colpasamiento").checked ? "tomato" : "";
-                                }, 0);
-                        }}>
+        return (
+                <AppRender>
+
+                        <label className="menu-izquierda-desactivador" for="estado-colpasamiento" onClick={() => setTimeout(() => {
+                                document.querySelector(".no-min-width").style.backgroundColor = document.getElementById("estado-colpasamiento").checked ? "tomato" : "";
+                        }, 0)}>
                         </label>
 
                         <div className="menu-izquierda">
                                 <input type="checkbox" id="estado-colpasamiento" className="d-none" />
 
-
-                                <div className="seccion-boton-menu colapsador">
-                                        <Button variant="contained" color="primary" onClick={() => {
-                                                document.getElementById("estado-colpasamiento").checked = !document.getElementById("estado-colpasamiento").checked;
-                                                document.querySelector(".no-min-width").style.backgroundColor = document.getElementById("estado-colpasamiento").checked ? "tomato" : "";
-                                        }}
-                                                className="no-min-width"
-                                        >
-                                                <span className="colapsado-vista">
-                                                        <i class="fa-solid fa-bars"></i>
-                                                </span>
-                                                <span className="descolapsado-vista">
-                                                        <i className="fa-solid fa-x"></i>
-                                                </span>
-                                        </Button>
-                                </div>
+                                <BotonSuperior />
 
                                 <div>
-                                        <BotonOpcionHerramienta font_awesome="fa-solid fa-house" label="Principal" href="/login" />
+                                        <BotonOpcionHerramienta font_awesome="fa-solid fa-earth-americas" label="Principal" href="/login" />
                                         <BotonOpcionHerramienta font_awesome="fa-regular fa-circle-user" label="Mi perfil" href="/login/mi-perfil" />
-                                        {
-                                                [1, 2].includes(user["FK_PERFIL"]) ?
-                                                        <React.Fragment>
-                                                                <BotonOpcionHerramienta font_awesome="fa-solid fa-screwdriver-wrench" label="Herramientas" href="/login/admin/" />
-                                                        </React.Fragment> :
-                                                        ""
-                                        }
                                 </div>
 
                                 <div className="descolapsado-vista">
@@ -109,33 +83,53 @@ const MenuIzquierda = () => {
 
                         </div>
 
-                </ThemeProvider>
+                </AppRender>
         );
+
+        function BotonSuperior() {
+                return (
+                        <div className="seccion-boton-menu colapsador">
+                                <Button variant="contained" color="primary" onClick={() => {
+                                        document.getElementById("estado-colpasamiento").checked = !document.getElementById("estado-colpasamiento").checked;
+                                        document.querySelector(".no-min-width").style.backgroundColor = document.getElementById("estado-colpasamiento").checked ? "tomato" : "";
+                                }}
+                                        className="no-min-width"
+                                >
+                                        <span className="colapsado-vista">
+                                                <i class="fa-solid fa-bars" />
+                                        </span>
+                                        <span className="descolapsado-vista">
+                                                <i className="fa-solid fa-x" />
+                                        </span>
+                                </Button>
+                        </div>
+                );
+        }
 };
 
 function BotonOpcionHerramienta({ font_awesome, label, href }) {
         return (
-                <div className="seccion-boton-menu opcion-herramienta">
-                        <Button
-                                className="no-min-width w-100P c-white  white-space-nowrap"
-                                size="large"
-                                startIcon={<i class={
-                                        font_awesome +
-                                        " descolapsado-vista"
-                                }></i>} title={label}
-                                href={href}
-                        >
-                                <i class={
-                                        font_awesome +
-                                        " colapsado-vista"
-                                }></i>
-                                <span className="descolapsado-vista">
-                                        {label}
-                                </span>
-                        </Button>
-                </div>
+                <Tooltip title={label} arrow placement="right" style={{ zIndex: 101 }}>
+                        <div className="seccion-boton-menu opcion-herramienta">
+
+                                <Button
+                                        className="no-min-width w-100P c-white  white-space-nowrap"
+                                        size="large"
+                                        startIcon={<i class={`
+                                        ${font_awesome}
+                                        descolapsado-vista
+                                `} />}
+                                        href={href}
+                                >
+                                        <i class={`
+                                                ${font_awesome}
+                                                colapsado-vista
+                                        `} />
+                                        <span className="descolapsado-vista">
+                                                {label}
+                                        </span>
+                                </Button>
+                        </div>
+                </Tooltip>
         );
 }
-
-ReactDOM.render(<MenuIzquierda />, contenedor_menu_izquierda);
-document.body.appendChild(contenedor_menu_izquierda);

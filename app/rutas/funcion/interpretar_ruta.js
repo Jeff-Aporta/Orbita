@@ -12,6 +12,11 @@ function interpretar_ruta(req, res, next) {
       break;
     }
   }
+
+  if (nodos_ruta[0] == "logged" && !req.user) {
+    return res.redirect("/");
+  }
+
   let ultimo_nodo_ruta = nodos_ruta.pop();
 
   let argumentos_ruta = require("./buscar_archivo")(

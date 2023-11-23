@@ -12,7 +12,7 @@ module.exports = (app_pack) => {
   app.post(
     "/login-verify",
     passport.authenticate("local", {
-      successRedirect: "/",
+      successRedirect: "/logged",
       failureRedirect: "/",
     })
   );

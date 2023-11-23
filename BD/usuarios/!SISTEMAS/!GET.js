@@ -5,7 +5,7 @@ module.exports = ({ json, ruta, seguro = true, context }) => {
     context,
   });
   if (seguro) {
-    delete json["CONTRASENA"];
+    delete json["contraseña"];
   }
   return json;
 };

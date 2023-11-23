@@ -1,3 +1,5 @@
+const memoria = require("../../../app/memoria");
+
 module.exports = ({ query }) => {
     let { login, contraseña } = query;
     if (!login || !contraseña) {
@@ -13,7 +15,9 @@ module.exports = ({ query }) => {
         };
     }
 
-    let { contraseña: contraseñaUser } = memoria.tools.Array2Nodo(`usuarios/${PK}/user.json`).cabeza;
+    let usuario = memoria.tools.Array2Nodo(`usuarios/${PK}/usuario.json`).cabeza;
+
+    let { contraseña: contraseñaUser } = usuario;
 
     if (contraseñaUser !== contraseña) {
         return {
@@ -21,7 +25,5 @@ module.exports = ({ query }) => {
         };
     }
 
-    return {
-        ok: "Usuario autenticado",
-    };
+    return usuario;
 }

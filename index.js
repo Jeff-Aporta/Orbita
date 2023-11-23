@@ -54,38 +54,39 @@ passport.use(
   new passportLocal(
     {
       usernameField: "usuario",
-      passwordField: "contrasena",
+      passwordField: "contraseña",
     },
     async (usuario, contraseña, done) => {
-      let login = require("./" + memoria.config.RAIZ + "/usuarios/@MACROS.js")({
-        instruccion: "auth",
-        args: {
+      console.log("usuario:", usuario);
+      console.log("contraseña:", contraseña);
+      let login = require("./" + memoria.config.RAIZ + "/usuarios/!SISTEMAS/!AUTENTICAR.js")({
+        query: {
           login: usuario,
           contraseña,
         },
-        url: "/usuarios/alias",
       });
-      let { auth, usuario: user } = login;
-      if (!auth) {
+      console.log("login:", login);
+      if (login.error) {
         return done(null, false);
       }
-      return done(null, user);
+      return done(null, login);
     }
   )
 );
 
 passport.serializeUser(function (user, done) {
-  done(null, user["LOGIN"]);
+  console.log("serialize:", user);
+  done(null, user["login"]);
 });
 
 passport.deserializeUser(async function (LOGIN, done) {
-  let user = require("./" + memoria.config.RAIZ + "/usuarios/@MACROS.js")({
-    instruccion: "alias",
-    args: {
+
+  let user = require("./" + memoria.config.RAIZ + "/usuarios/!SISTEMAS/!LOGIN")({
+    query: {
       login: LOGIN,
     },
-    url: "/usuarios/alias",
   });
+  console.log("deserialize",user);
   if (user) {
     done(null, user);
   } else {
@@ -101,20 +102,6 @@ require("./API_BD")(pack_app);
 
 app.get("/stop-server", (req, res) => {
   let user = req.user;
-  if (!user) {
-    return res.send(
-      templatesString.redirección({
-        textoPrincipal: "No has iniciado sesión",
-      })
-    );
-  }
-  if (user["FK_PERFIL"] != 1) {
-    return res.send(
-      templatesString.redirección({
-        textoPrincipal: "No tienes permiso para hacer esto",
-      })
-    );
-  }
   res.send("Server stopped");
   setTimeout(() => {
     server.close();
