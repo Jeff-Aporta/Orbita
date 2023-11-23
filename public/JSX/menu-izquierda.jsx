@@ -62,8 +62,8 @@ function MenuIzquierda() {
                                 <BotonSuperior />
 
                                 <div>
-                                        <BotonOpcionHerramienta font_awesome="fa-solid fa-earth-americas" label="Principal" href="/login" />
-                                        <BotonOpcionHerramienta font_awesome="fa-regular fa-circle-user" label="Mi perfil" href="/login/mi-perfil" />
+                                        <BotonOpcionHerramienta font_awesome="fa-solid fa-earth-americas" label="Principal" href="/logged" />
+                                        <BotonOpcionHerramienta font_awesome="fa-regular fa-circle-user" label="Mi perfil" href="/logged/mi-perfil" />
                                 </div>
 
                                 <div className="descolapsado-vista">
