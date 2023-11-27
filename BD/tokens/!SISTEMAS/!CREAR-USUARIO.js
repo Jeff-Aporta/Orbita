@@ -25,7 +25,7 @@ module.exports = ({ query}) => {
                 }
             }
         });
-    }, 1000*30);
+    }, 1000*60);
 
     return {
         ok: "Invitacion creada",

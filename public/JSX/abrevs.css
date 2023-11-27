@@ -111,6 +111,12 @@
         display: none !important;
 }
 
+.d-flex-jc-space-between-ai-center {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+}
+
 .silueta-blanca{
         filter: brightness(0) invert(1);
 }

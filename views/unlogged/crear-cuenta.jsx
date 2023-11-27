@@ -2,60 +2,101 @@ let token = search.get('token');
 
 async function App() {
     if (!token) {
+        return <UsarToken />;
+    }
+    let tokenInfo = JSONBD({
+        ruta: `tokens/${token}.json`,
+    })
+    if (tokenInfo["tipo"] != "crear usuario") {
         return (
             <AppSimpleCentred>
-                <h1 style={{ display: "flex", alignItems: "center", gap: 20 }}>
-                    <Logo w={100} /> 
-                    <span>
-                    Token 
-                    <br />
-                    de invitación
-                    </span>
+                <h1>
+                    <Logo w={100} />
+                    Token inválido
                 </h1>
-                <br />
-                <TextField
-                    label="Código"
-                    className="token-de-invitacion"
-                    variant="outlined"
-                    fullWidth
-                />
-                <br />
-                <br />
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <hr />
+                <div className="d-flex-jc-space-between-ai-center">
                     <Button variant="contained" color="error" href="/">
-                        Cancelar
-                    </Button>
-
-                    <Button variant="contained" color="primary" onClick={() => {
-                        let token = document.querySelector(".token-de-invitacion input").value;
-                        window.location.href = `/unlogged/crear-cuenta?token=${token}`;
-                    }}
-                        size="large"
-                        endIcon={<i className="fa-solid fa-arrow-right" />}
-                    >
-                        Usar
+                        Cerrar
                     </Button>
                 </div>
-                &nbsp;
-                <br />
-                <hr />
-                <br />
-                <BotonCrearToken />
             </AppSimpleCentred>
         )
     }
-    let tokenInfo = JSONBD({
-        ruta: `tokens/crear-cuenta/${token}.json`,
-    })
+    if (tokenInfo["expiracion"]) {
+        return (
+            <AppSimpleCentred>
+                <h1>
+                    <Logo w={100} />    
+                    Token expirado
+                </h1>
+                <hr />
+                <div className="d-flex-jc-space-between-ai-center">
+                    <Button variant="contained" color="error" href="/">
+                        Cerrar
+                    </Button>
+                </div>
+            </AppSimpleCentred>
+        );
+    }
     console.log(tokenInfo);
     return (
-        console.log("Crear cuenta"),
         <AppSimpleCentred>
             <h1>
+                <Logo w={100} />
                 Crear cuenta
             </h1>
+            <div className="d-flex-jc-space-between-ai-center">
+                <Button variant="contained" color="error" href="/">
+                    Rechazar token
+                </Button>
+                <Button variant="contained" color="primary">
+                    Crear
+                </Button>
+            </div>
         </AppSimpleCentred>
     )
+
+    function UsarToken() {
+        return <AppSimpleCentred>
+            <h1 style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                <Logo w={100} />
+                <span>
+                    Token
+                    <br />
+                    de invitación
+                </span>
+            </h1>
+            <br />
+            <TextField
+                label="Código"
+                className="token-de-invitacion"
+                variant="outlined"
+                fullWidth />
+            <br />
+            <br />
+            <div className="d-flex-jc-space-between-ai-center">
+                <Button variant="contained" color="error" href="/">
+                    Cancelar
+                </Button>
+
+                <Button variant="contained" color="primary" onClick={() => {
+                    let token = document.querySelector(".token-de-invitacion input").value;
+                    window.location.href = `/unlogged/crear-cuenta?token=${token}`;
+                }}
+                    size="large"
+                    endIcon={<i className="fa-solid fa-arrow-right" />}
+                >
+                    Usar
+                </Button>
+            </div>
+            &nbsp;
+            <br />
+            <hr />
+            <br />
+            <BotonCrearToken />
+        </AppSimpleCentred>;
+    }
 
     function BotonCrearToken() {
         return <Button variant="contained" color="primary" onClick={async () => {
