@@ -14,14 +14,13 @@ const memoria = require("../../../app/memoria");
 const _fs = require("../../../app/memoria/_fs");
 
 module.exports = ({ query }) => {
-
   if (!["login", "contraseña"].every((clave) => query[clave])) {
     return {
       error: "Faltan datos para crear el usuario",
     };
   }
 
-  let PK = memoria.tools.Array2Nodo("usuarios/!SISTEMAS/PK.json").cabeza
+  let PK = JSONBD_GET("usuarios/!SISTEMAS/PK.json")
     .contador;
 
   if (

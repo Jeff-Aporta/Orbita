@@ -44,3 +44,11 @@ hr {
     }
   }
 }
+
+.swal2-backdrop-show {
+  background-color: rgba(128, 128, 128, 0.5) !important;
+}
+
+.swal2-confirm {
+  background-color: dodgerblue !important;
+}

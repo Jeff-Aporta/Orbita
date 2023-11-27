@@ -7,7 +7,7 @@ module.exports = ({ query }) => {
             error: "Faltan datos para la autenticacion",
         };
     }
-    let { PK } = memoria.tools.Array2Nodo(`usuarios/!SISTEMAS/ALIAS/LOGIN/${login}.json`).cabeza;
+    let { PK } = JSONBD_GET(`usuarios/!SISTEMAS/ALIAS/LOGIN/${login}.json`);
 
     if (!PK) {
         return {
@@ -15,7 +15,7 @@ module.exports = ({ query }) => {
         };
     }
 
-    let usuario = memoria.tools.Array2Nodo(`usuarios/${PK}/usuario.json`).cabeza;
+    let usuario = JSONBD_GET(`usuarios/${PK}/usuario.json`);
 
     let { contraseña: contraseñaUser } = usuario;
 

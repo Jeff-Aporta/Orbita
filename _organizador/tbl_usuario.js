@@ -26,7 +26,7 @@ async function main() {
   ];
   for (let i = 0; i < usuarios.length; i++) {
     const usuario = usuarios[i];
-    await memoria.EXEC({
+    await JSONBD_EXEC({
       DOC: {
         usuarios: {
           [usuario["PK"]]: {
@@ -36,7 +36,7 @@ async function main() {
       },
     });
 
-    await memoria.EXEC({
+    await JSONBD_EXEC({
       DOC: {
         usuarios: {
           SISTEMAS: {

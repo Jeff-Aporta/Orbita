@@ -30,11 +30,8 @@ const lightTheme = createTheme({
   },
 });
 
-if (!localStorage.getItem("theme")) {
-  localStorage.setItem("theme", "dark");
-}
-
 let theme = localStorage.getItem("theme") == "dark" ? darkTheme : lightTheme;
+
 
 let styleBasic = document.createElement("style");
 styleBasic.innerHTML = `
@@ -52,38 +49,62 @@ let colorTheme = {
   }
 }
 
-function AppSimple({ children }) {
+function AppTheme({ children }) {
+  console.log("AppTheme", theme)
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      {children}
+    </ThemeProvider>
+  );
+}
+
+function AppSimple({ children }) {
+  return (
+    <AppTheme>
       <div className="app">
         {children}
       </div>
-    </ThemeProvider>
+    </AppTheme>
+  );
+}
+
+function AppSimpleCentred({ children }) {
+  crearEstilo({
+    ".app": {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh",
+    }
+  })
+  return (
+    <AppTheme>
+      <div className="app">
+        <Paper elevation={3} style={{ padding: 15 }}>
+          {children}
+        </Paper>
+      </div>
+    </AppTheme>
   );
 }
 
 function AppLogged({ children }) {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <div className="menu-superior">
-        <MenuSuperior />
-      </div>
-      <div className="menu-izquierda">
-        <MenuIzquierda />
-      </div>
+    <AppTheme>
+      <MenuSuperior />
+      <MenuIzquierda />
       <div className="app">
         {children}
       </div>
-    </ThemeProvider>
+    </AppTheme>
   );
 }
 
-function AppRender({ children }) {
+function AppRender({ children, className }) {
   return (
     <ThemeProvider theme={theme}>
-      <div className="render">
+      <div className={"render" + className}>
         {children}
       </div>
     </ThemeProvider>

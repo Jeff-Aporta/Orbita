@@ -3,11 +3,16 @@
 <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Orbita</title>
+        <title>SIPUC</title>
 
         <%- include('@headerlinks.ejs') %>
-
-        <script src="<%- info_pagina.carpeta %><%- info_pagina.carpeta.endsWith("/") ? "" : "/" %><%- info_pagina.nombre  %>.jsx" type="text/babel" defer></script>
+        <!--  -->
+        <% 
+                let URL_MAIN = `/${info_pagina.carpeta}${info_pagina.carpeta.endsWith("/") ? "" : "/"}${info_pagina.nombre}.jsx`
+                URL_MAIN = URL_MAIN.replace("//", "/");
+        %>
+        <!--  -->
+        <script src="<%- URL_MAIN %>" type="text/babel" defer></script>
         
         <script src="/JSX/!fin.jsx" type="text/babel" defer></script>
 </head>

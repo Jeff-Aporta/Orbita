@@ -20,7 +20,7 @@ crearEstilo({
                 },
 
                 ".background": {
-                        "background-image": "linear-gradient(to right, darkblue, black, rgb(0, 56, 139))",
+                        "background-image": "linear-gradient(to right, darkblue, dodgerblue, rgb(0, 56, 139))",
                         "background-size": "400% 100%",
                         animation: "gradient 15s ease infinite alternate",
                         "z-index": 1,
@@ -49,6 +49,7 @@ crearEstilo({
                 width: "100vw",
 
                 ".banner-izquierda": {
+                        filter: "drop-shadow(3px 3px 0px rgba(0, 0, 0, 1))",
                         width: "500px",
 
                         "& h1": {
@@ -61,34 +62,37 @@ crearEstilo({
         }
 })
 
-const App = () => {
+function App() {
         return (
-                <ThemeProvider theme={theme}>
-                        <CssBaseline />
-                        <Fondo />
-                        <div className="app">
-                                <BannerIzquierda />
-                                <Paper elevation={3} className="d-inline-block pad-20" style={{ width: "400px" }}>
-                                        <Formulario />
-                                </Paper>
+                <AppTheme>
+                        <div className="app-capas">
+                                <Fondo />
+                                <div className="app">
+                                        <BannerIzquierda />
+                                        <Paper elevation={3} className="d-inline-block pad-20" style={{ width: "400px" }}>
+                                                <Formulario />
+                                        </Paper>
+                                </div>
                         </div>
-                </ThemeProvider>
+                </AppTheme>
         );
 
 
         function Fondo() {
-                return <div className="background-container">
-                        <div className="background" />
-                        <img src="img/svg/back1.svg" className="background2" />
-                </div>;
+                return (
+                        <div className="background-container">
+                                <div className="background" />
+                                <img src="img/svg/back1.svg" className="background2" />
+                        </div>
+                );
         }
 
         function BannerIzquierda() {
                 return <div className="banner-izquierda">
                         <h1 className="berlow"                        >
-                                <Logo w={100} />
+                                <Logo w={200} />
                                 &nbsp;&nbsp;
-                                Orbita
+                                SIPUC
                         </h1>
                         <h2>
                                 Te ayuda a comunicarte y compartir con las personas que forman parte de tu vida.
@@ -140,114 +144,11 @@ const App = () => {
                 }
 
                 function BotonCrearNuevaCuenta() {
-                        return <Button variant="contained" color="secondary" onClick={() => {
-                                swal.fire({
-                                        title: "Registro",
-                                        html: `<div class="ta-left App-registro"></div>`,
-                                        showCloseButton: true,
-                                        showConfirmButton: false,
-                                        showCancelButton: false,
-                                        willOpen: () => {
-                                                /*
-                                                        http://localhost:3000/BD?json-query=usuarios/{
-                                                                CREAR: {
-                                                                        login: "alexmacias",
-                                                                        contraseña: "registel",
-                                                                        nombre: "alex",
-                                                                        apellido: "macias",
-                                                                        "fecha-nacimiento": "1990-01-01"
-                                                                }
-                                                        }
-                                                */
-                                                ReactDOM.render(
-                                                        <AppRender>
-                                                                <div style={{
-                                                                        display: "flex",
-                                                                        justifyContent: "space-between",
-                                                                }}>
-                                                                        <TextField id="nombre" label="Nombre" />
-                                                                        <TextField id="apellido" label="Apellido" />
-                                                                </div>
-                                                                <br />
-                                                                <TextField id="login" label="Usuario" fullWidth />
-                                                                <br />
-                                                                <br />
-                                                                <div style={{
-                                                                        display: "flex",
-                                                                        justifyContent: "space-between",
-                                                                }}>
-                                                                        <TextField id="contraseña1" label="Contraseña" type="password" />
-                                                                        <TextField id="contraseña2" label="Repetir contraseña" type="password" />
-                                                                </div>
-                                                                <br />
-                                                                <TextField
-                                                                        id="fecha-nacimiento"
-                                                                        label="Fecha de nacimiento"
-                                                                        type="date"
-                                                                        InputLabelProps={{
-                                                                                shrink: true,
-                                                                        }}
-                                                                        fullWidth
-                                                                />
-                                                                <br />
-                                                                <br />
-                                                                <Button variant="contained" color="primary" onClick={async () => {
-                                                                        if (document.querySelector(".App-registro #contraseña1").value !== document.querySelector(".App-registro #contraseña2").value) {
-                                                                                swal.fire({
-                                                                                        title: "Error",
-                                                                                        text: "Las contraseñas no coinciden",
-                                                                                        icon: "error",
-                                                                                        confirmButtonText: "Cerrar",
-                                                                                });
-                                                                                return;
-                                                                        }
-                                                                        let res = await (await fetch(`/BD?json-query=usuarios/${JSON.stringify({
-                                                                                CREAR: {
-                                                                                        login: document.querySelector(".App-registro #login").value,
-                                                                                        contraseña: document.querySelector(".App-registro #contraseña1").value,
-                                                                                        nombre: document.querySelector(".App-registro #nombre").value,
-                                                                                        apellido: document.querySelector(".App-registro #apellido").value,
-                                                                                        "fecha-nacimiento": document.querySelector(".App-registro #fecha-nacimiento").value,
-                                                                                },
-                                                                        })}`)).json();
-
-                                                                        console.log("res", res);
-
-                                                                        if (res["error"]) {
-                                                                                swal.fire({
-                                                                                        title: "Error",
-                                                                                        text: res["error"],
-                                                                                        icon: "error",
-                                                                                        confirmButtonText: "Cerrar",
-                                                                                });
-                                                                                return;
-                                                                        } else if (res["ok"]) {
-                                                                                swal.fire({
-                                                                                        title: "Usuario creado",
-                                                                                        text: "Usuario creado con éxito",
-                                                                                        icon: "success",
-                                                                                        confirmButtonText: "Cerrar",
-                                                                                });
-                                                                        } else {
-                                                                                swal.fire({
-                                                                                        title: "Error",
-                                                                                        text: "Error desconocido",
-                                                                                        icon: "error",
-                                                                                        confirmButtonText: "Cerrar",
-                                                                                });
-                                                                        }
-                                                                }}>
-
-                                                                        Crear cuenta
-                                                                </Button>
-                                                        </AppRender>,
-                                                        document.querySelector(".App-registro")
-                                                );
-                                        },
-                                });
-                        }}>
-                                Crea una cuenta
-                        </Button>;
+                        return (
+                                <Button variant="contained" color="secondary" href="/unlogged/crear-cuenta">
+                                        Tengo un token de invitación
+                                </Button>
+                        )
                 }
         }
 };

@@ -53,10 +53,9 @@ function MenuIzquierda() {
 
                         <label className="menu-izquierda-desactivador" for="estado-colpasamiento" onClick={() => setTimeout(() => {
                                 document.querySelector(".no-min-width").style.backgroundColor = document.getElementById("estado-colpasamiento").checked ? "tomato" : "";
-                        }, 0)}>
-                        </label>
+                        }, 0)} />
 
-                        <div className="menu-izquierda">
+                        <div className="menu izquierda">
                                 <input type="checkbox" id="estado-colpasamiento" className="d-none" />
 
                                 <BotonSuperior />

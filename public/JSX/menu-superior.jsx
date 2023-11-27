@@ -1,6 +1,6 @@
 function MenuSuperior() {
         return (
-                <AppRender>
+                <AppRender className="menu superior">
                         <Paper
                                 style={{
                                         display: "flex",
@@ -10,9 +10,16 @@ function MenuSuperior() {
                                         padding: "10px",
                                 }}
                         >
-                                <Button variant="contained" color="secondary" startIcon={<i className="fa-solid fa-users" />} >
-                                        Amigos
-                                </Button>
+                                <div>
+                                        <Button variant="contained" color="secondary" startIcon={<i className="fa-solid fa-users" />} >
+                                                Amigos
+                                        </Button>
+                                        &nbsp;
+                                        &nbsp;
+                                        {
+                                                user["login"]
+                                        }
+                                </div>
 
                                 <div>
                                         <IconButtonContador contador={1} title="Mensajes">

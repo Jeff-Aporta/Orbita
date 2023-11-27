@@ -7,9 +7,7 @@ module.exports = ({ query }) => {
       error: "Faltan datos para la consulta",
     };
   }
-  let { PK } = memoria.tools.Array2Nodo(
-    `usuarios/!SISTEMAS/ALIAS/LOGIN/${login}.json`
-  ).cabeza;
+  let { PK } = JSONBD_GET(`usuarios/!SISTEMAS/ALIAS/LOGIN/${login}.json`);
 
   if (!PK) {
     return {
@@ -19,7 +17,7 @@ module.exports = ({ query }) => {
 
   let ruta = `usuarios/${PK}/usuario.json`;
 
-  let usuario = memoria.tools.Array2Nodo(ruta).cabeza;
+  let usuario = JSONBD_GET(ruta);
 
   if (!usuario) {
     return {

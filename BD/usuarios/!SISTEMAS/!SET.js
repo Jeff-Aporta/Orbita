@@ -68,7 +68,7 @@ async function ActualizarLOGIN(ruta, nombre, json_new, json_old, json) {
     json_new["LOGIN"] != json_old["LOGIN"] ||
     !loginAlmacenado[json["LOGIN"]]
   ) {
-    LOGIN = LOGIN.replace(memoria.config.RAIZ + "/", "");
+    LOGIN = LOGIN.replace(`${JSONBD_ROOT}/`, "");
 
     async function UPDATE(k, v) {
       if (k == undefined) {
@@ -86,7 +86,7 @@ async function ActualizarLOGIN(ruta, nombre, json_new, json_old, json) {
         TQUERY_UPDATE[item] = {};
         TQUERY_UPDATE = TQUERY_UPDATE[item];
       });
-      await memoria.EXEC({
+      await JSONBD_EXEC({
         DOC: QUERY_UPDATE,
       });
     }

@@ -58,7 +58,7 @@ body:has(#estado-colpasamiento:checked){
         }
 }
 
-.menu-izquierda{
+.menu.izquierda{
         padding: 10px;
         position: fixed;
         top: 0;

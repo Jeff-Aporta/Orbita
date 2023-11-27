@@ -19,6 +19,7 @@ const socketio = require("socket.io");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const memoria = require("./app/memoria");
+const _fs = require("./app/memoria/_fs");
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const app = express();
 const server = http.createServer(app);
@@ -50,6 +51,8 @@ const pack_app = {
   urlencodedParser,
 };
 
+require("./API_BD")(pack_app);
+
 passport.use(
   new passportLocal(
     {
@@ -57,15 +60,12 @@ passport.use(
       passwordField: "contraseña",
     },
     async (usuario, contraseña, done) => {
-      console.log("usuario:", usuario);
-      console.log("contraseña:", contraseña);
-      let login = require("./" + memoria.config.RAIZ + "/usuarios/!SISTEMAS/!AUTENTICAR.js")({
+      let login = JSONBD_MODULE("usuarios/!SISTEMAS/!AUTENTICAR.js")({
         query: {
           login: usuario,
           contraseña,
         },
       });
-      console.log("login:", login);
       if (login.error) {
         return done(null, false);
       }
@@ -75,18 +75,11 @@ passport.use(
 );
 
 passport.serializeUser(function (user, done) {
-  console.log("serialize:", user);
-  done(null, user["login"]);
+  done(null, user["PK"]);
 });
 
-passport.deserializeUser(async function (LOGIN, done) {
-
-  let user = require("./" + memoria.config.RAIZ + "/usuarios/!SISTEMAS/!LOGIN")({
-    query: {
-      login: LOGIN,
-    },
-  });
-  console.log("deserialize",user);
+passport.deserializeUser(async function (PK, done) {
+  let user = JSONBD_GET(`usuarios/${PK}/usuario.json`);
   if (user) {
     done(null, user);
   } else {
@@ -98,15 +91,14 @@ server.listen(app.get("port"), () => {
   console.log("corriendo en el puerto:", app.get("port"));
 });
 
-require("./API_BD")(pack_app);
 
-app.get("/stop-server", (req, res) => {
-  let user = req.user;
-  res.send("Server stopped");
-  setTimeout(() => {
-    server.close();
-    process.exit();
-  }, 1000);
-});
+// app.get("/stop-server", (req, res) => {
+//   let user = req.user;
+//   res.send("Server stopped");
+//   setTimeout(() => {
+//     server.close();
+//     process.exit();
+//   }, 1000);
+// });
 
 require("./app/rutas")(pack_app);

@@ -1,3 +1,7 @@
+if (!localStorage.getItem("theme") || !user) {
+  localStorage.setItem("theme", "dark");
+}
+
 function JS2CSS(estilo) {
   const estiloConvertido = {};
 
@@ -62,9 +66,6 @@ const addLink = (href, rel = "stylesheet") => {
   document.head.appendChild(link);
 };
 
-addLink(
-  "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-);
 addScript({ src: "/JS/ventana-flotante/index.js" });
 
 Iconos_fa_bs();
@@ -92,4 +93,53 @@ function Iconos_fa_bs() {
   addLink(
     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
   );
+}
+
+async function JSONBD({
+  ruta = "/",
+  query = "",
+  async = false,
+  some,
+  every,
+  find,
+  filter,
+  map,
+  COL,
+  NCOL,
+}) {
+  if (!ruta && !query) {
+    return {
+      error: "No se especificó ruta ni query",
+    };
+  }
+
+  async function fetchAsync() {
+    let $user = user ? `&user=${JSON.stringify({ PK: user["PK"] })}` : "";
+    let $filter = filter ? `&filter=${JSON.stringify(filter + "")}` : "";
+    let $map = map ? `&map=${JSON.stringify(map + "")}` : "";
+    let $some = some ? `&some=${JSON.stringify(some + "")}` : "";
+    let $every = every ? `&every=${JSON.stringify(every + "")}` : "";
+    let $find = find ? `&find=${JSON.stringify(find + "")}` : "";
+    let $COL = COL
+      ? `&COL=${JSON.stringify(COL)}`
+      : "";
+    let $NCOL = NCOL
+      ? `&NCOL=${JSON.stringify(NCOL)}`
+      : "";
+
+    let URLQUERY = `/BD?json-query=${ruta}${JSON.stringify(query)}${
+      $user + $filter + $some + $every + $find + $COL + $NCOL + $map
+    }`;
+    let respuesta = await (await fetch(URLQUERY)).json();
+    console.log("URLQUERY", URLQUERY, respuesta, "async", async);
+    return respuesta;
+  }
+
+  if (async) {
+    return await fetchAsync();
+  }
+
+  return new Promise(async (resolve) => {
+    resolve(await fetchAsync());
+  });
 }
