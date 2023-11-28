@@ -1,7 +1,7 @@
 let memoria = require("../memoria");
 
-module.exports = (app_pack) => {
-  let { app, passport } = app_pack;
+module.exports = () => {
+  let { app, passport } = APP_PACK;
 
   app.get("/logout", function (req, res) {
     req.session.destroy(function (err) {
@@ -12,8 +12,8 @@ module.exports = (app_pack) => {
   app.post(
     "/login-verify",
     passport.authenticate("local", {
-      successRedirect: "/logged",
-      failureRedirect: "/",
+      successRedirect: "/",
+      failureRedirect: "/logged",
     })
   );
 };

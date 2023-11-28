@@ -58,9 +58,8 @@ function buscar_archivo(...nodos_de_ruta) {
       }
 
       function caso_2_carpeta_consultada() {
-        ruta = `${nodos_de_ruta.join("/")}/${
-          ultimo_nodo_ruta + "/index" + extension
-        }`;
+        ruta = `${nodos_de_ruta.join("/")}/${ultimo_nodo_ruta + "/index" + extension
+          }`;
         ruta = herramienta.limpiar_ruta(ruta);
         if (ruta_existe(ruta, carpeta_base)) {
           return retornar({

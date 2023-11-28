@@ -7,19 +7,21 @@ module.exports = ({ query }) => {
             error: "Faltan datos para la autenticacion",
         };
     }
-    let { PK } = JSONBD_GET(`usuarios/!SISTEMAS/ALIAS/LOGIN/${login}.json`);
+    let LOGIN = JSONBD_GET(`usuarios/!/ALIAS/LOGIN/${login}.json`);
 
-    if (!PK) {
+    if (!LOGIN) {
         return {
             error: "El nombre de usuario no existe",
         };
-    }
+    }    
+
+    let { PK } = LOGIN;
 
     let usuario = JSONBD_GET(`usuarios/${PK}/usuario.json`);
 
-    let { contraseña: contraseñaUser } = usuario;
+    let { contraseña: _contraseña_ } = usuario;
 
-    if (contraseñaUser !== contraseña) {
+    if (_contraseña_ != contraseña) {
         return {
             error: "La contraseña es incorrecta",
         };

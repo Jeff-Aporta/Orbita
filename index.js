@@ -1,12 +1,16 @@
 "use strict";
-
-var path = require("path");
-
-global.root = __dirname.split(path.sep).join("/");
+global.root = __dirname.split(require("path").sep).join("/");
+global.HTML_MINIFY = (html) => require('html-minifier').minify(html, {
+  collapseWhitespace: true,
+  removeComments: true,
+  removeRedundantAttributes: true,
+  removeScriptTypeAttributes: true,
+  removeStyleLinkTypeAttributes: true,
+  useShortDoctype: true,
+  removeAttributeQuotes: true,
+});
 
 require("./polyfills");
-
-//require("./app/internal-structures")
 
 let templatesString = require("./templates-string");
 
@@ -19,7 +23,6 @@ const socketio = require("socket.io");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const memoria = require("./app/memoria");
-const _fs = require("./app/memoria/_fs");
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const app = express();
 const server = http.createServer(app);
@@ -44,29 +47,29 @@ app.use(passport.session());
 
 app.use(require("morgan")("combined"));
 
-const pack_app = {
+global.APP_PACK = {
   io,
   app,
   passport,
   urlencodedParser,
 };
 
-require("./API_BD")(pack_app);
+require("./API_BD")();
 
 passport.use(
   new passportLocal(
     {
       usernameField: "usuario",
-      passwordField: "contraseña",
+      passwordField: "contrasena",
     },
     async (usuario, contraseña, done) => {
-      let login = JSONBD_MODULE("usuarios/!SISTEMAS/!AUTENTICAR.js")({
+      let login = JSONBD_MODULE("usuarios/!/AUTENTICAR")({
         query: {
           login: usuario,
-          contraseña,
-        },
+          contraseña
+        }
       });
-      if (login.error) {
+      if (!login || login.error) {
         return done(null, false);
       }
       return done(null, login);
@@ -75,13 +78,17 @@ passport.use(
 );
 
 passport.serializeUser(function (user, done) {
-  done(null, user["PK"]);
+  done(null, user["LOGIN"]);
 });
 
-passport.deserializeUser(async function (PK, done) {
-  let user = JSONBD_GET(`usuarios/${PK}/usuario.json`);
-  if (user) {
-    done(null, user);
+passport.deserializeUser(async function (LOGIN, done) {
+  let login = JSONBD_MODULE("usuarios/!/CONSULTA")({
+    query: {
+      login: LOGIN,
+    }
+  });
+  if (login) {
+    done(null, login);
   } else {
     done(null, false);
   }
@@ -92,13 +99,28 @@ server.listen(app.get("port"), () => {
 });
 
 
-// app.get("/stop-server", (req, res) => {
-//   let user = req.user;
-//   res.send("Server stopped");
-//   setTimeout(() => {
-//     server.close();
-//     process.exit();
-//   }, 1000);
-// });
+app.get("/stop-server", (req, res) => {
+  let user = req.user;
+  if (!user) {
+    return res.send(
+      templatesString.redirección({
+        textoPrincipal: "No has iniciado sesión",
+      })
+    );
+  }
+  if (user["FK_PERFIL"] != 1) {
+    return res.send(
+      templatesString.redirección({
+        textoPrincipal: "No tienes permiso para hacer esto",
+      })
+    );
+  }
+  res.send("Server stopped");
+  setTimeout(() => {
+    server.close();
+    process.exit();
+  }, 1000);
+});
 
-require("./app/rutas")(pack_app);
+require("./app/rutas")();
+require("./socket.io.main")();

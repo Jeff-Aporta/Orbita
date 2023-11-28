@@ -8,38 +8,17 @@ async function App() {
         ruta: `tokens/${token}.json`,
     })
     if (tokenInfo["tipo"] != "crear usuario") {
-        return (
-            <AppSimpleCentred>
-                <h1>
-                    <Logo w={100} />
-                    Token inválido
-                </h1>
-                <hr />
-                <div className="d-flex-jc-space-between-ai-center">
-                    <Button variant="contained" color="error" href="/">
-                        Cerrar
-                    </Button>
-                </div>
-            </AppSimpleCentred>
-        )
+        return <AppErrorToken
+            titulo="Token inválido"
+            mensaje="El token no es válido para crear una cuenta."
+        />
     }
     if (tokenInfo["expiracion"]) {
-        return (
-            <AppSimpleCentred>
-                <h1>
-                    <Logo w={100} />    
-                    Token expirado
-                </h1>
-                <hr />
-                <div className="d-flex-jc-space-between-ai-center">
-                    <Button variant="contained" color="error" href="/">
-                        Cerrar
-                    </Button>
-                </div>
-            </AppSimpleCentred>
-        );
+        return <AppErrorToken
+            titulo="Token expirado"
+            mensaje="El token ha expirado."
+        />
     }
-    console.log(tokenInfo);
     return (
         <AppSimpleCentred>
             <h1>
@@ -56,6 +35,22 @@ async function App() {
             </div>
         </AppSimpleCentred>
     )
+
+    function AppErrorToken({ titulo, mensaje }) {
+        return <AppSimpleCentred>
+            <h1>
+                <Logo w={100} />
+                {titulo}
+            </h1>
+            {mensaje}
+            <hr />
+            <div className="d-flex-jc-space-between-ai-center">
+                <Button variant="contained" color="error" href="/">
+                    Cerrar
+                </Button>
+            </div>
+        </AppSimpleCentred>;
+    }
 
     function UsarToken() {
         return <AppSimpleCentred>
